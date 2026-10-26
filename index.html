@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VioChat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- shared butterfly wing shape -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <g id="wingshape">
+        <path d="M32 32 C14 4 0 16 6 34 C10 46 26 46 32 36 Z"/>
+        <path d="M32 34 C20 38 12 52 22 59 C30 62 33 48 32 38 Z" opacity=".75"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ================= SIGN IN / SIGN UP ================= -->
+  <div id="auth">
+    <div class="bg-glow"></div>
+
+    <span class="spark s1">&#10022;</span>
+    <span class="spark s2">&#10022;</span>
+    <span class="spark s3">&#10022;</span>
+    <span class="spark s4">&#10022;</span>
+    <span class="float-heart h1">&#9825;</span>
+    <span class="float-heart h2">&#9825;</span>
+    <span class="float-heart h3">&#9829;</span>
+
+    <div class="butterfly b1">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <g class="wing"><use href="#wingshape"/></g>
+        <g transform="translate(64 0) scale(-1 1)"><g class="wing"><use href="#wingshape"/></g></g>
+        <rect class="bf-body" x="30.5" y="20" width="3" height="26" rx="1.5"/>
+      </svg>
+    </div>
+    <div class="butterfly b2">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <g class="wing"><use href="#wingshape"/></g>
+        <g transform="translate(64 0) scale(-1 1)"><g class="wing"><use href="#wingshape"/></g></g>
+        <rect class="bf-body" x="30.5" y="20" width="3" height="26" rx="1.5"/>
+      </svg>
+    </div>
+
+    <img class="cat" src="cat.png" alt="">
+
+    <div class="auth-box">
+      <div class="logo-wrap">
+        <span class="spark ls1">&#10022;</span>
+        <div class="logo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.4-7 10-7 10z" fill="#fff"/></svg>
+        </div>
+        <span class="spark ls2">&#10022;</span>
+      </div>
+
+      <h1>Welcome to <span class="grad">VioChat</span></h1>
+      <p class="sub">Sign in to start chatting with your friends <span class="sub-heart">&#9829;</span></p>
+
+      <div class="tabs">
+        <button id="tabLogin" class="active" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg>
+          Sign in
+        </button>
+        <button id="tabSignup" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M2 21v-1a6 6 0 016-6h4a6 6 0 016 6v1M19 8v6M16 11h6"/></svg>
+          Sign up
+        </button>
+      </div>
+
+      <div id="signupFields" class="hidden">
+        <label class="field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg>
+          <input id="name" type="text" placeholder="Your name">
+        </label>
+        <label class="field">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
+          <input id="phone" type="tel" placeholder="Phone number">
+        </label>
+      </div>
+
+      <label class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        <input id="email" type="email" placeholder="Email">
+      </label>
+      <label class="field">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        <input id="password" type="password" placeholder="Password (at least 6 characters)">
+      </label>
+
+      <div id="authError"></div>
+      <button id="authBtn" class="btn" type="button">Sign in &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ================= CHAT SCREEN ================= -->
+  <div id="app" class="hidden">
+
+    <aside class="sidebar">
+      <div class="side-head">
+        <div class="me">
+          <div class="avatar" id="meAvatar">?</div>
+          <div class="me-text">
+            <b id="meName"></b>
+            <span class="me-status"><i class="dot online"></i> Online</span>
+          </div>
+        </div>
+        <div class="head-actions">
+          <button class="ghost-btn" id="qrBtn" type="button" title="QR code">QR</button>
+          <button class="ghost-btn" id="themeBtn" type="button" title="Dark / Light mode">&#9728;&#65039;</button>
+          <button class="ghost-btn" id="logoutBtn" type="button">Log out</button>
+        </div>
+      </div>
+
+      <div class="side-tabs">
+        <button id="tabChats" class="active" type="button">Chats</button>
+        <button id="tabStatus" type="button">Status</button>
+      </div>
+
+      <div class="search" id="searchWrap">
+        <input id="searchBox" type="text" placeholder="Search by name or number">
+      </div>
+
+      <div id="userList"></div>
+
+      <div id="statusPanel" class="hidden"><div id="statusList"></div></div>
+    </aside>
+
+    <main class="chat">
+      <div class="placeholder" id="noChat">
+        <div>
+          <div class="cat-card"><img src="cat.png" alt=""></div>
+          <h2>Pick a chat</h2>
+          <p>Choose a friend from the list to start talking</p>
+        </div>
+      </div>
+
+      <div class="chat-head hidden" id="chatHead">
+        <button id="backBtn" type="button" aria-label="Back">&larr;</button>
+        <div class="avatar" id="chatAvatar"></div>
+        <div class="grow">
+          <div id="chatName" class="chat-name"></div>
+          <div id="chatStatus" class="chat-status"></div>
+        </div>
+        <button class="ghost-btn" id="wallBtn" type="button" title="Chat wallpaper">&#127912; Wallpaper</button>
+      </div>
+
+      <div id="messages" class="hidden"></div>
+
+      <!-- normal composer -->
+      <div class="composer hidden" id="composer">
+        <div id="emojiPanel" class="emoji-panel hidden"></div>
+        <div id="attachMenu" class="attach-menu hidden">
+          <button type="button" data-attach="photo">&#128444;&#65039; Photo</button>
+          <button type="button" data-attach="file">&#128196; File</button>
+          <button type="button" data-attach="contact">&#128100; Contact</button>
+        </div>
+        <button class="icon-btn" id="attachBtn" type="button" title="Attach">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 11.1l-9.2 9.2a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 015.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.5-8.5"/></svg>
+        </button>
+        <button class="icon-btn" id="emojiBtn" type="button" title="Emoji">&#128522;</button>
+        <input id="msgInput" type="text" placeholder="Type a message" autocomplete="off">
+        <button class="icon-btn" id="micBtn" type="button" title="Record voice note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v4"/></svg>
+        </button>
+        <button class="send" id="sendBtn" type="button" aria-label="Send">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+
+      <!-- recording bar -->
+      <div class="composer recording hidden" id="recBar">
+        <span class="rec-dot"></span>
+        <span id="recTime" class="rec-time">0:00</span>
+        <span class="rec-hint grow">Recording voice note...</span>
+        <button class="ghost-btn" id="recCancel" type="button">Cancel</button>
+        <button class="send" id="recSend" type="button" aria-label="Send voice note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <input type="file" id="photoInput" accept="image/*" hidden>
+  <input type="file" id="fileInput" hidden>
+
+  <!-- ===== Wallpaper window ===== -->
+  <div class="modal hidden" id="wallModal">
+    <div class="modal-box">
+      <div class="modal-head"><b>Chat wallpaper</b><button class="x" type="button" data-close>&#10005;</button></div>
+      <div class="wall-grid" id="wallGrid"></div>
+      <div class="modal-actions">
+        <label class="ghost-btn">Upload your photo<input type="file" id="wallUpload" accept="image/*" hidden></label>
+        <button class="ghost-btn" id="wallReset" type="button">Reset</button>
+      </div>
+      <p class="hint">This wallpaper is used for this chat on this device.</p>
+    </div>
+  </div>
+
+  <!-- ===== Contact window ===== -->
+  <div class="modal hidden" id="contactModal">
+    <div class="modal-box">
+      <div class="modal-head"><b>Send a contact</b><button class="x" type="button" data-close>&#10005;</button></div>
+      <div id="contactList" class="contact-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== New status window ===== -->
+  <div class="modal hidden" id="statusModal">
+    <div class="modal-box">
+      <div class="modal-head"><b>New status</b><button class="x" type="button" data-close>&#10005;</button></div>
+      <div class="seg">
+        <button id="stTabText" class="active" type="button">Text</button>
+        <button id="stTabPhoto" type="button">Photo</button>
+      </div>
+      <div id="stTextBox">
+        <textarea id="statusText" maxlength="200" placeholder="Type your status..."></textarea>
+        <div class="swatches" id="statusColors"></div>
+      </div>
+      <div id="stPhotoBox" class="hidden">
+        <label class="ghost-btn">Choose photo<input type="file" id="statusPhotoInput" accept="image/*" hidden></label>
+        <img id="statusPreview" class="status-preview hidden" alt="">
+      </div>
+      <button class="btn" id="statusPost" type="button" style="margin-top:14px">Post status</button>
+      <p class="hint">Your status disappears after 24 hours.</p>
+    </div>
+  </div>
+
+  <!-- ===== Status viewer ===== -->
+  <div class="story hidden" id="story">
+    <div class="story-box">
+      <div class="story-bars" id="storyBars"></div>
+      <div class="story-head">
+        <div class="grow"><b id="storyName"></b><div id="storyTime" class="story-time"></div></div>
+        <button class="story-del hidden" id="storyDelete" type="button">Delete</button>
+        <button class="x" id="storyClose" type="button">&#10005;</button>
+      </div>
+      <div class="story-content" id="storyContent"></div>
+    </div>
+  </div>
+
+  <!-- ===== QR window ===== -->
+  <div class="modal hidden" id="qrModal">
+    <div class="modal-box">
+      <div class="modal-head"><b>QR code</b><button class="x" type="button" data-close>&#10005;</button></div>
+      <div class="seg">
+        <button id="qrTabMy" class="active" type="button">My QR</button>
+        <button id="qrTabScan" type="button">Scan</button>
+      </div>
+      <div id="qrMy">
+        <div id="qrBox" class="qr-box"></div>
+        <p class="hint center">Friends can scan this to chat with you.</p>
+        <div class="link-row" id="qrLink"></div>
+        <button class="ghost-btn" id="qrCopy" type="button">Copy link</button>
+        <p class="hint">Note: the link opens for other people only after this app is put online.</p>
+      </div>
+      <div id="qrScan" class="hidden">
+        <video id="scanVideo" class="scan-video hidden" playsinline muted></video>
+        <p class="hint center" id="scanMsg">Scan a friend's VioChat QR code.</p>
+        <button class="ghost-btn" id="scanStart" type="button">Start camera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Photo viewer ===== -->
+  <div class="viewer hidden" id="viewer"><img id="viewerImg" alt=""></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
